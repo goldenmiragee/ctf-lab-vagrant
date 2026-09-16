@@ -177,7 +177,7 @@ Honest notes from building and attacking each box — including what broke and h
 
 | Target          | Technique                                | Result     | Notes                                    |
 |-----------------|------------------------------------------|:----------:|------------------------------------------|
-| metasploitable  | vsftpd 2.3.4 backdoor (CVE-2011-2523)    | _planned_  | Phase 2                                  |
+| metasploitable  | Box boots + reachable on host-only net   | ✅ / ⚠️   | Up at `192.168.56.20` (ports 21/22/80/3306; ProFTPD 1.3.5, Apache 2.4.7). **But** it's Metasploitable**3**; the `MSF_*` flags target Metasploitable2 services and need alignment — see [known-issues](docs/known-issues.md). |
 | dc01            | Windows Server on VirtualBox 7.2         | _planned_  | Phase 3 — build stability tracked in known-issues |
 
 Detailed per-level writeups live in **[docs/walkthroughs/](docs/walkthroughs/)**.

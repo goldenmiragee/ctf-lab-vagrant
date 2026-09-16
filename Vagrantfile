@@ -49,6 +49,8 @@ MACHINES = {
   "metasploitable" => {
     box: "rapid7/metasploitable3-ub1404", ip: "192.168.56.20", cpus: 1, mem: 1024,
     script: nil, autostart: false,
+    # this box rejects Vagrant's key insertion; use its built-in vagrant creds
+    ssh_user: "vagrant", ssh_pass: "vagrant", insert_key: false,
   },
 
   # ---- Phase 3 (Active Directory) -- heavy, brought up on demand ----
@@ -72,6 +74,11 @@ Vagrant.configure("2") do |config|
       node.vm.box = m[:box]
       node.vm.hostname = name
       node.vm.communicator = m[:comm] if m[:comm]
+
+      # some prebuilt boxes reject key insertion; fall back to their built-in creds
+      node.ssh.insert_key = false if m[:insert_key] == false
+      node.ssh.username = m[:ssh_user] if m[:ssh_user]
+      node.ssh.password = m[:ssh_pass] if m[:ssh_pass]
 
       # isolated host-only network with a fixed address
       node.vm.network "private_network", ip: m[:ip]

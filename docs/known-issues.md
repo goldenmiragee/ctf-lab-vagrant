@@ -30,9 +30,24 @@ methodology — it is more useful to a reviewer than pretending everything is fr
 
 ## Metasploitable (`metasploitable`) — Phase 2
 
-- Some legacy services (e.g. Samba usermap) can be flaky to trigger depending on the box image
-  and networking mode; workarounds are noted in the relevant walkthrough.
-- The image is intentionally ancient and unpatched — never expose it beyond the host-only net.
+Verified on VirtualBox 7.2 (box `rapid7/metasploitable3-ub1404` v0.1.12):
+
+- **The box needs its built-in `vagrant`/`vagrant` credentials with key insertion disabled**
+  (`insert_key = false`), otherwise `vagrant up` loops on `Authentication failure`. This is
+  configured in the `Vagrantfile`. A side effect: `vagrant ssh -c` won't work for this box
+  (password auth) — use interactive `vagrant ssh` or `ssh vagrant@192.168.56.20`.
+- The **first boot is slow** and may exceed the SSH-wait timeout; the VM keeps booting. A
+  `vagrant reload metasploitable` (or a second `vagrant up`) finishes networking.
+- Once up, it is reachable on the host-only net at **192.168.56.20** with ports **21, 22, 80,
+  3306** open (confirmed). It runs **ProFTPD 1.3.5** and **Apache 2.4.7**.
+- ⚠️ **Flag-set mismatch (action needed):** the 11 `MSF_*` flags were authored with classic
+  **Metasploitable2** semantics (vsftpd 2.3.4, UnrealIRCd 6667, Samba usermap CVE-2007-2447,
+  distccd, Java RMI, Tomcat). This Vagrant box is **Metasploitable3-ub1404**, which exposes a
+  *different* service set (e.g. ProFTPD 1.3.5 → CVE-2015-3306, and typically ElasticSearch,
+  Drupal, phpMyAdmin, Jenkins). Before relying on the `MSF_*` flags, either **(a)** re-author
+  them to this box's real services, or **(b)** supply an actual Metasploitable2 image. Tracked
+  as an open item; these flags are **not** marked verified.
+- The image is intentionally unpatched — never expose it beyond the host-only net.
 
 ## Juice Shop / DVWA
 
