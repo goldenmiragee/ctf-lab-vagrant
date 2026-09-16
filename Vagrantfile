@@ -80,6 +80,14 @@ Vagrant.configure("2") do |config|
       node.ssh.username = m[:ssh_user] if m[:ssh_user]
       node.ssh.password = m[:ssh_pass] if m[:ssh_pass]
 
+      # Windows/WinRM is slow and timing-sensitive on VirtualBox 7.2 — be patient
+      if m[:comm] == "winrm"
+        node.vm.boot_timeout = 1800
+        node.winrm.timeout = 1800
+        node.winrm.retry_limit = 100
+        node.winrm.retry_delay = 10
+      end
+
       # isolated host-only network with a fixed address
       node.vm.network "private_network", ip: m[:ip]
 

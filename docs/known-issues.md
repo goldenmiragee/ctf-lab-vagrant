@@ -20,8 +20,15 @@ methodology — it is more useful to a reviewer than pretending everything is fr
 
 - The `windows_2019` box is **large (~10+ GB)** and slow to import; first `vagrant up` can take
   a long time.
-- WinRM-based provisioning on VirtualBox 7.2 can be **timing-sensitive**; a provisioning step
-  may need a retry (`vagrant provision dc01`).
+- WinRM-based provisioning on VirtualBox 7.2 is **timing-sensitive**. **Observed in this build:**
+  the box downloads and boots, WinRM is assigned, and provisioning *starts*, but the WinRM
+  `init_auth` (negotiate) call then times out — reproduced across three attempts (initial
+  `up`, wait + `up`, wait + `provision`). The box vintage (`StefanScherer/windows_2019`
+  v2021.05.15) predates VirtualBox 7.2 and its guest additions/WinRM stack lag behind.
+  **Mitigations (in order):** the `Vagrantfile` now raises `winrm.timeout`/`boot_timeout` to
+  1800s and retries — retry `vagrant provision dc01` a few times once Windows has fully
+  settled; if it still fails, use a newer Windows box or provision AD manually over RDP by
+  running `provision/dc01.ps1` inside the guest. This is the fragile piece of the lab.
 - Promoting the domain controller **reboots** the guest mid-provision. This is expected; give
   it time.
 - If the DC proves unstable on this VirtualBox version, that outcome will be recorded in the

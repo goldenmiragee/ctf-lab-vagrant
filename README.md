@@ -12,7 +12,7 @@
   <img alt="VirtualBox"   src="https://img.shields.io/badge/VirtualBox-183A61?logo=virtualbox&logoColor=white">
   <img alt="Python"       src="https://img.shields.io/badge/Python-stdlib_only-3776AB?logo=python&logoColor=white">
   <img alt="Flags"        src="https://img.shields.io/badge/Flags-90%20(30%2F30%2F30)-brightgreen">
-  <img alt="Status"       src="https://img.shields.io/badge/Phase%201-verified%20live-brightgreen">
+  <img alt="Status"       src="https://img.shields.io/badge/Phases%201%20%26%202-verified%20live-brightgreen">
   <img alt="License"      src="https://img.shields.io/badge/License-MIT-blue">
 </p>
 
@@ -178,7 +178,7 @@ Honest notes from building and attacking each box — including what broke and h
 | Target          | Technique                                | Result     | Notes                                    |
 |-----------------|------------------------------------------|:----------:|------------------------------------------|
 | metasploitable  | Box boots, reachable, flags aligned      | ✅       | Up at `192.168.56.20` (ProFTPD 1.3.5, Apache 2.4.7, Drupal 7, phpMyAdmin, Samba). `MSF_*` flags re-authored to this box; 5 box-observable answers verified against the live services. |
-| dc01            | Windows Server on VirtualBox 7.2         | _planned_  | Phase 3 — build stability tracked in known-issues |
+| dc01            | Windows AD provisioning on VirtualBox 7.2 | ❌ (blocked) | 10 GB box downloads and boots, but WinRM `init_auth` times out (reproduced ×3). Box vintage predates VBox 7.2. Raised WinRM timeouts as a forward-fix; documented retry / manual-provision paths in [known-issues](docs/known-issues.md). Honest limitation, not hidden. |
 
 Detailed per-level writeups live in **[docs/walkthroughs/](docs/walkthroughs/)**.
 
