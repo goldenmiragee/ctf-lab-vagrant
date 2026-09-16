@@ -1,0 +1,829 @@
+{
+  "generated_at": "2026-09-16T18:48:46+00:00",
+  "count": 90,
+  "machines": [
+    "ubuntu-server",
+    "ubuntu-client",
+    "dvwa",
+    "juiceshop",
+    "metasploitable",
+    "dc01"
+  ],
+  "levels": [
+    "basic",
+    "medium",
+    "hard"
+  ],
+  "flags": [
+    {
+      "id": "SRV_B01",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "recon/info-disclosure",
+      "question": "A web root leaves a file exposed that should never be public. Read it. What is the flag?",
+      "hint": "Browse http://192.168.56.30/ and look for obvious leftover files (robots.txt, backup/).",
+      "answer_sha256": "c2024804d1b32c0fcc6b5d3e03b04e3980939fa2563df059ae6de2c89d642849"
+    },
+    {
+      "id": "SRV_B02",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "default-credentials",
+      "question": "A service account still uses a trivial password. Log in over SSH and read the flag in its home directory.",
+      "hint": "Try common weak creds for user 'deploy' (think 'deploy:deploy').",
+      "answer_sha256": "e00974769b33d6edcdf521f3c513672518eeaa8fb8e435fd45abe0b8fdabb014"
+    },
+    {
+      "id": "SRV_B03",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "The SSH login banner (MOTD) leaks something it shouldn't. What is the flag shown at login?",
+      "hint": "Read the message-of-the-day; it prints on every SSH connection.",
+      "answer_sha256": "99d5c51e09797017e9d5bf6e9a264996cfef688186123e89b58f5fe0b6144005"
+    },
+    {
+      "id": "SRV_B04",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "A world-readable backup of admin credentials sits under /opt. Find it and submit the flag inside.",
+      "hint": "Look in /opt/backup/ for a file readable by everyone.",
+      "answer_sha256": "0acdb3b43c5ae520cfff29fe143139e20bae4370b0fe50e64cf8ce188b68ba03"
+    },
+    {
+      "id": "SRV_B05",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "recon",
+      "question": "An exposed service advertises its version in the banner. Which flag is embedded in the custom TCP banner on port 8081?",
+      "hint": "netcat/nmap the host; connect to port 8081 and read what it sends.",
+      "answer_sha256": "1fd9f6b32be771148fc6aedaa3dfe4547d60a67412d99ecb3c6c5ab414296988"
+    },
+    {
+      "id": "SRV_B06",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "A developer left a flag in a user's shell history. Read it. What is the flag?",
+      "hint": "Check ~/.bash_history for the 'deploy' user after logging in.",
+      "answer_sha256": "1341dda816baff6a74bab943452c44a0878b1a224cd7da0958d29d4274b3a704"
+    },
+    {
+      "id": "SRV_B07",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "misconfiguration",
+      "question": "An exposed '.git' directory under the web root lets you recover a committed secret. What flag was committed?",
+      "hint": "http://192.168.56.30/.git/ is browsable; dump it or read config/logs.",
+      "answer_sha256": "8bfc01f22cc6754e8f64346ccad2799913627e00ab433146a90399b24ff76526"
+    },
+    {
+      "id": "SRV_B08",
+      "machine": "ubuntu-server",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "A cron comment references a flag in a world-readable script under /etc/cron.d. What is it?",
+      "hint": "Read files in /etc/cron.d/ \u2014 one script has a flag in a comment.",
+      "answer_sha256": "c333a6d112d886c5d41c15fbbb87ded469b9da9edef521e50fc310fa2e34fb02"
+    },
+    {
+      "id": "SRV_M01",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "privesc/sudo",
+      "question": "The 'deploy' user can run a specific binary via sudo without a password, enabling a shell. Escalate to root and read /root/flag_sudo.txt.",
+      "hint": "Run `sudo -l`. A GTFOBins-friendly binary is allowed (think 'find' or 'vim').",
+      "answer_sha256": "6cc8c93c643d92d229434635710c650189a60310160d1f1deee1a399c1df9d59"
+    },
+    {
+      "id": "SRV_M02",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "privesc/suid",
+      "question": "A custom SUID-root binary runs a system command unsafely. Exploit it to read /root/flag_suid.txt.",
+      "hint": "Find SUID files: `find / -perm -4000 2>/dev/null`. One calls a binary via relative PATH.",
+      "answer_sha256": "662a6d03e87d3598b005ab59ad33926d33cf5eb9a0b7f4a9d742d2b66ebae0d2"
+    },
+    {
+      "id": "SRV_M03",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "privesc/cron",
+      "question": "A root cron job executes a world-writable script every minute. Hijack it to plant a copy of /root/flag_cron.txt somewhere you can read.",
+      "hint": "Inspect running cron; find a script under /opt that root runs and everyone can write.",
+      "answer_sha256": "520f9bd194e02d95bf6b9030f22e6cbfb29e6eed8733a161f341a3504850e1d8"
+    },
+    {
+      "id": "SRV_M04",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "weak-crypto",
+      "question": "A backup archive is 'encrypted' with a weak, guessable zip password. Crack it and read the flag inside.",
+      "hint": "/opt/backup/secret.zip \u2014 the password is a common word; use fcrackzip/john with rockyou.",
+      "answer_sha256": "190bc9fc6640f8dc9e43bd153df5fc4973f3fba331ead0698083bc54bbf0306d"
+    },
+    {
+      "id": "SRV_M05",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "capabilities",
+      "question": "A binary carries a Linux capability that allows reading arbitrary files as root. Use it to read /root/flag_cap.txt.",
+      "hint": "`getcap -r / 2>/dev/null` \u2014 look for cap_dac_read_search or cap_setuid on an interpreter.",
+      "answer_sha256": "ca6132a70c432ca532f74ba4e8eb0bfb2bd819ee6e8090697878e4ddfd7475b1"
+    },
+    {
+      "id": "SRV_M06",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "service-config",
+      "question": "A misconfigured NFS export is world-mountable with no_root_squash. Mount it and read the flag.",
+      "hint": "`showmount -e 192.168.56.30`; mount the export and look for flag.txt.",
+      "answer_sha256": "8c31750181d654816b751c036030029071747e53df4fd7a14a341622a00b4ad2"
+    },
+    {
+      "id": "SRV_M07",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "db-exposure",
+      "question": "A local MySQL instance accepts root with an empty password. Connect and read the flag from the 'secrets' database.",
+      "hint": "`mysql -u root` with no password; SELECT from secrets.flags.",
+      "answer_sha256": "5f337c95b5453029cf57205bd903c2766f3842e02b7669a9cc09e0e355c5c48f"
+    },
+    {
+      "id": "SRV_M08",
+      "machine": "ubuntu-server",
+      "level": "medium",
+      "category": "privesc/path",
+      "question": "A sudo-allowed script relies on a relative command name. Abuse PATH to hijack it and read /root/flag_env.txt.",
+      "hint": "sudo -l shows a script using `env_keep+=PATH` or calling `tar`/`cat` without a full path.",
+      "answer_sha256": "24de12f00a48d7018ff6a13f19b2ef2446aa6d465246463d16b9ae85b975253d"
+    },
+    {
+      "id": "SRV_H01",
+      "machine": "ubuntu-server",
+      "level": "hard",
+      "category": "privesc/kernel-or-chain",
+      "question": "Chain a low-priv foothold to root without touching an obvious sudo/SUID path, then read /root/.hidden/flag_chain.txt.",
+      "hint": "Enumerate with linpeas; the intended path is a writable systemd unit or timer the deploy group can edit.",
+      "answer_sha256": "c2b14fe9843bab9a3ec79679f405b8d0db4283e7428a82930148ff0875412aad"
+    },
+    {
+      "id": "SRV_H02",
+      "machine": "ubuntu-server",
+      "level": "hard",
+      "category": "privesc/ld-preload",
+      "question": "A sudo rule preserves LD_PRELOAD. Build a malicious shared object to get root and read /root/.hidden/flag_ldpreload.txt.",
+      "hint": "sudo -l shows env_keep += LD_PRELOAD; compile a .so with a constructor that execs a shell.",
+      "answer_sha256": "beca1fa61d7488d713088bff7aabe3a9330d1a54ef409114ff1394499774d8cd"
+    },
+    {
+      "id": "SRV_H03",
+      "machine": "ubuntu-server",
+      "level": "hard",
+      "category": "container-escape",
+      "question": "The deploy user is in the 'docker' group. Use it to read a root-only flag from the host at /root/.hidden/flag_docker.txt.",
+      "hint": "Membership in docker == root. Mount the host / into a container: `docker run -v /:/host ...`.",
+      "answer_sha256": "106172457ee0e6c5bc652bdf4f3f83d43fe498e1decb1dcbcbb46c6cee43e74b"
+    },
+    {
+      "id": "SRV_H04",
+      "machine": "ubuntu-server",
+      "level": "hard",
+      "category": "secrets/token-reuse",
+      "question": "An API token committed in an old git pack under the web root still works against the local admin API on port 8082. Use it to fetch the flag.",
+      "hint": "Recover the token from /var/www/html/.git packed objects, then `curl -H 'Authorization: Bearer ...' :8082/flag`.",
+      "answer_sha256": "9c203824f81f997690842a9f480de15cf022c0da014092d564e4ae875b67ea40"
+    },
+    {
+      "id": "SRV_H05",
+      "machine": "ubuntu-server",
+      "level": "hard",
+      "category": "privesc/wildcard",
+      "question": "A root backup cron uses `tar` with a wildcard in a writable directory. Exploit tar checkpoint options to run code as root and read /root/.hidden/flag_wildcard.txt.",
+      "hint": "Drop files named '--checkpoint=1' and '--checkpoint-action=exec=...' in the archived dir.",
+      "answer_sha256": "965641ec123f6e1926b1281b2f2bc28c5012f1adaae65422f3d3aa142bbc6e8b"
+    },
+    {
+      "id": "SRV_H06",
+      "machine": "ubuntu-server",
+      "level": "hard",
+      "category": "lateral-movement",
+      "question": "Credentials found on ubuntu-server unlock a service on ubuntu-client (192.168.56.31). Pivot there and submit the flag from /home/svc/flag_pivot.txt.",
+      "hint": "Reused SSH creds / private key in deploy's ~/.ssh let you jump to ubuntu-client's 'svc' user.",
+      "answer_sha256": "3cd4ba692d6e33db5420e8ee8b0efb90074c4342a97db98c08417c6c8995fd1c"
+    },
+    {
+      "id": "CLI_B01",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "A note left on the desktop of user 'alice' contains a flag. Read it.",
+      "hint": "Log in as alice (weak password 'password123') and check ~/Desktop/notes.txt.",
+      "answer_sha256": "3b9afec31f1d8ad1bb274b223ec24719a12a0e50550728f45844cd2c607f952f"
+    },
+    {
+      "id": "CLI_B02",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "weak-credentials",
+      "question": "User 'alice' reuses a weak password. Log in and submit the flag in her home directory.",
+      "hint": "Common password 'password123'. Flag is in ~/flag.txt.",
+      "answer_sha256": "1dfd86beccf98c250d93efc8910c5b4f21d19fd35561295dcf659aee098eae67"
+    },
+    {
+      "id": "CLI_B03",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "A flag hides in EXIF metadata of an image in alice's Pictures folder. Extract it.",
+      "hint": "`exiftool ~/Pictures/vacation.jpg` \u2014 check the Comment/UserComment field.",
+      "answer_sha256": "c56dd20a6da952abf3b08f8b2ca283f2c857905fbc77c02eb67e9321be5ed788"
+    },
+    {
+      "id": "CLI_B04",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "A flag is base64-encoded inside a config dotfile in alice's home. Decode it.",
+      "hint": "grep for a long base64 string in ~/.config; `base64 -d` it.",
+      "answer_sha256": "ca756bf9b709dc282be2ef979ecc566c9f06aaf5857870ccce6f148d85796e36"
+    },
+    {
+      "id": "CLI_B05",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "steganography",
+      "question": "A text file in /tmp looks empty but hides a flag using trailing whitespace/zero-width characters. Reveal it.",
+      "hint": "`cat -A /tmp/empty.txt` or hexdump to see hidden bytes.",
+      "answer_sha256": "6401a13ebba3cd71cd7e1d11938f3b72499b0456c1cf76404d4b15a5f2f97e32"
+    },
+    {
+      "id": "CLI_B06",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "Alice saved credentials in her Firefox/plaintext profile. Find the flag stored as a saved 'password'.",
+      "hint": "Look in ~/.mozilla-style profile dir provisioned at ~/creds/logins.txt.",
+      "answer_sha256": "30d9ad2059f1abcf7b479bd36121d0a76aa2f09f6f3ebf3ab2bdbf59b72df2eb"
+    },
+    {
+      "id": "CLI_B07",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "recon",
+      "question": "A hidden file in / (root of filesystem) is world-readable and holds a flag. Find it.",
+      "hint": "`find / -maxdepth 2 -name '.*flag*' 2>/dev/null`.",
+      "answer_sha256": "9fc0bc61f3be6866453286365f1d8e98045135df32bc554669b9d0bcd5c1ba7a"
+    },
+    {
+      "id": "CLI_B08",
+      "machine": "ubuntu-client",
+      "level": "basic",
+      "category": "info-disclosure",
+      "question": "A flag is stored in a systemd journal log message. Grep the journal for it.",
+      "hint": "`journalctl | grep FLAG` (or grep /var/log).",
+      "answer_sha256": "e647c3581e8f2668e03b6de0f587da5b9b384eea3bbd1b2079fa0e834a25e2b5"
+    },
+    {
+      "id": "CLI_M01",
+      "machine": "ubuntu-client",
+      "level": "medium",
+      "category": "privesc/sudo",
+      "question": "Alice can edit a root-owned file via 'sudo <editor>'. Break out to a root shell and read /root/flag_editor.txt.",
+      "hint": "sudo -l shows sudoedit or sudo vi/less; use the editor's shell escape (GTFOBins).",
+      "answer_sha256": "25ce4dc3fe400e5afa2a282c67112aa5a7cff6e5d33ffc2da87a887f86a7904f"
+    },
+    {
+      "id": "CLI_M02",
+      "machine": "ubuntu-client",
+      "level": "medium",
+      "category": "privesc/group",
+      "question": "Alice belongs to a group that owns a script run as root. Modify it to read /root/flag_group.txt.",
+      "hint": "Check `id`; find files group-writable by alice's supplementary group under /usr/local/bin.",
+      "answer_sha256": "fd925d610c7284ddf1724a45291aed5dfe3a5b80d021d8a2d11225784874b9e3"
+    },
+    {
+      "id": "CLI_M03",
+      "machine": "ubuntu-client",
+      "level": "medium",
+      "category": "ssh-key-abuse",
+      "question": "A private SSH key with weak/no passphrase lets you become user 'bob'. Read the flag in bob's home.",
+      "hint": "alice can read ~/.ssh/id_rsa belonging to bob (bad perms). Use it to `ssh bob@localhost`.",
+      "answer_sha256": "800633a0db78b7a43e9cce8173305154410ed0b11abc255b23bc13649a48f95d"
+    },
+    {
+      "id": "CLI_M04",
+      "machine": "ubuntu-client",
+      "level": "medium",
+      "category": "scheduled-task",
+      "question": "A user cron for 'bob' runs a script alice can write. Hijack it to grab bob's secret flag.",
+      "hint": "crontab for bob calls a script alice can edit; wait for it to run.",
+      "answer_sha256": "43b8f1f13e1c04c0d2609f130d013ad21ef5695508a45f6a83d9f331b1bc510a"
+    },
+    {
+      "id": "CLI_M05",
+      "machine": "ubuntu-client",
+      "level": "medium",
+      "category": "password-cracking",
+      "question": "An /etc/shadow backup is readable. Crack the weak hash for 'bob' and submit the recovered PASSWORD (not a FLAG{}).",
+      "hint": "Backup at /var/backups/shadow.bak; run john/hashcat with rockyou. The password itself is the answer.",
+      "answer_sha256": "d84e2b8dd8cecfe6937f180346d9a1f7250a213d494d358db589077390b1ebcd"
+    },
+    {
+      "id": "CLI_M06",
+      "machine": "ubuntu-client",
+      "level": "medium",
+      "category": "privesc/pkexec",
+      "question": "A misconfigured polkit rule lets alice run a privileged action. Use it to read /root/flag_polkit.txt.",
+      "hint": "Check pkexec / polkit rules under /etc/polkit-1; a custom rule allows a root action.",
+      "answer_sha256": "22a8bee4a4cdabb5f191f9a9faa021798e05c33267d26a96d18fe54745c88922"
+    },
+    {
+      "id": "CLI_M07",
+      "machine": "ubuntu-client",
+      "level": "medium",
+      "category": "privesc/path",
+      "question": "A root cron script calls a command by relative name and root's PATH includes a writable dir. Hijack it for /root/flag_pathcron.txt.",
+      "hint": "root PATH contains /usr/local/games (writable); the cron script calls `backup` unqualified.",
+      "answer_sha256": "87f50e37f4439f8b32eae76ac633fc8546ad7e469af36aa914d2fbc525e1a69f"
+    },
+    {
+      "id": "CLI_H01",
+      "machine": "ubuntu-client",
+      "level": "hard",
+      "category": "privesc/namespace",
+      "question": "Abuse an unprivileged user namespace + a setuid helper to gain root and read /root/.hidden/flag_userns.txt.",
+      "hint": "A vulnerable helper in /usr/local/bin trusts uid mapping inside a user namespace.",
+      "answer_sha256": "e8ee43af68e2042c0c854ab85470cee6c7d8cb914764b54a0d790304a04d59cf"
+    },
+    {
+      "id": "CLI_H02",
+      "machine": "ubuntu-client",
+      "level": "hard",
+      "category": "privesc/race",
+      "question": "A root helper has a TOCTOU race when handling a temp file. Win the race to read /root/.hidden/flag_race.txt.",
+      "hint": "The helper checks then opens a predictable /tmp path; swap it with a symlink in a loop.",
+      "answer_sha256": "792390679e12f5cf79f842ba8f857bcd934c2a72cc561c2601163bce931b8bb7"
+    },
+    {
+      "id": "CLI_H03",
+      "machine": "ubuntu-client",
+      "level": "hard",
+      "category": "memory/format-string",
+      "question": "A custom setuid C binary has a format-string bug. Exploit it to leak or overwrite and read /root/.hidden/flag_fmt.txt.",
+      "hint": "The binary prints your input with printf(user_input). Use %n/%p style primitives.",
+      "answer_sha256": "ccb0aca91e2b4d1c76468455ab769381a02c5ca3d603e17f75d5c58143a04b4f"
+    },
+    {
+      "id": "CLI_H04",
+      "machine": "ubuntu-client",
+      "level": "hard",
+      "category": "privesc/sudo-token",
+      "question": "Reuse an active sudo session token from another logged-in shell to run a command as root and read /root/.hidden/flag_token.txt.",
+      "hint": "If ptrace is permissive, hijack an existing sudo timestamp/token of user bob.",
+      "answer_sha256": "749c3dff513819e5729f40c92a52d3e131baf81179d74b451dd015b8e1e1aac3"
+    },
+    {
+      "id": "CLI_H05",
+      "machine": "ubuntu-client",
+      "level": "hard",
+      "category": "exfil/covert",
+      "question": "A flag is split across three files and XOR-combined. Recover all parts and reconstruct the flag.",
+      "hint": "Parts in /opt/parts/{a,b,c}.bin; XOR them together to get printable text.",
+      "answer_sha256": "02b7f079aba0536b144a3ae2acb559868be13b8dc7ef16a0113ad630e808aaf1"
+    },
+    {
+      "id": "DVWA_B01",
+      "machine": "dvwa",
+      "level": "basic",
+      "category": "web/default-creds",
+      "question": "Log in to DVWA with its well-known default credentials. What is the default PASSWORD for the 'admin' account?",
+      "hint": "It's one of the most infamous default passwords in security training.",
+      "answer_sha256": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+    },
+    {
+      "id": "DVWA_B02",
+      "machine": "dvwa",
+      "level": "basic",
+      "category": "web/sqli",
+      "question": "On 'SQL Injection' (Low), inject to dump users. What is the password HASH (md5) for user 'admin'?",
+      "hint": "Input `%' OR '1'='1` in the ID field; the admin hash is the md5 of 'password'.",
+      "answer_sha256": "3f2cd8e57b096fe7e4a78a5627e34ca3f885ad65a56e61c287cf4211bbc5949f"
+    },
+    {
+      "id": "DVWA_B03",
+      "machine": "dvwa",
+      "level": "basic",
+      "category": "web/xss-reflected",
+      "question": "Trigger reflected XSS on the 'XSS (Reflected)' Low page. Submit the exact JavaScript alert payload that pops the string 'xss'.",
+      "hint": "Put a <script> tag in the name field.",
+      "answer_sha256": "697037c5857946d4c3fdd96f713a0ba5fd69792eb6e41aeeb2abaf20918fe8b2"
+    },
+    {
+      "id": "DVWA_B04",
+      "machine": "dvwa",
+      "level": "basic",
+      "category": "web/command-injection",
+      "question": "On 'Command Injection' (Low), chain a command to read the OS. Which file confirms user accounts (submit the full path you'd read)?",
+      "hint": "Append `; cat /etc/passwd` to the ping input.",
+      "answer_sha256": "74acf31844532670be412c65b8251ee55d072549080b1cffdbea6b1a192230a0"
+    },
+    {
+      "id": "DVWA_B05",
+      "machine": "dvwa",
+      "level": "basic",
+      "category": "web/file-inclusion",
+      "question": "On 'File Inclusion' (Low), use LFI to read a system file via the page parameter. What parameter name is vulnerable?",
+      "hint": "Look at the URL: ?page=... ",
+      "answer_sha256": "3660315a9af3df255d8f19ab077e4797822b41488a0e2a04bc6af71213c23274"
+    },
+    {
+      "id": "DVWA_B06",
+      "machine": "dvwa",
+      "level": "basic",
+      "category": "web/csrf",
+      "question": "On 'CSRF' (Low), the password-change form has no anti-CSRF token. What HTTP method does the vulnerable form submit with?",
+      "hint": "Inspect the form; it changes the password via the query string.",
+      "answer_sha256": "14e30cd163c732912e048c4c837e15c4e90c062ebb795ab947d57706e2d10dd8"
+    },
+    {
+      "id": "DVWA_M01",
+      "machine": "dvwa",
+      "level": "medium",
+      "category": "web/sqli",
+      "question": "Defeat the 'SQL Injection' Medium filter (which uses mysql_real_escape_string on a numeric id). What HTTP parameter tampering technique bypasses it? (one word)",
+      "hint": "The id is sent via POST and not quoted; you don't need quotes.",
+      "answer_sha256": "9aee6b1bcdf617d8e39bb1f2b624c68ea33deb9d48e0364aeaded836d3d00293"
+    },
+    {
+      "id": "DVWA_M02",
+      "machine": "dvwa",
+      "level": "medium",
+      "category": "web/xss-stored",
+      "question": "Store an XSS payload in the guestbook (Medium). The 'name' field is length-limited client-side. What browser tool bypasses that limit? (short answer)",
+      "hint": "You can edit the maxlength attribute or resend the request.",
+      "answer_sha256": "0678966dbb59ed47c43162874ae5a4a5038720ee1c228e1944d2a95117f9584c"
+    },
+    {
+      "id": "DVWA_M03",
+      "machine": "dvwa",
+      "level": "medium",
+      "category": "web/file-upload",
+      "question": "Bypass the Medium file-upload filter that checks Content-Type. What Content-Type must you forge to upload a PHP webshell as an image?",
+      "hint": "The server trusts the request's Content-Type header.",
+      "answer_sha256": "fd824fcedd245e55871c74cb48ebbad02dab9bc4b9370433b609d6022ece7a73"
+    },
+    {
+      "id": "DVWA_M04",
+      "machine": "dvwa",
+      "level": "medium",
+      "category": "web/command-injection",
+      "question": "On Command Injection (Medium), some separators are blacklisted. Which two-character operator still works to chain commands?",
+      "hint": "'&&' and ';' may be filtered; try the background/pipe operators.",
+      "answer_sha256": "73e7b6f86214bc78ee505fb5f7d4fb97cfa99924a67ca3105113c9a3d52f8fef"
+    },
+    {
+      "id": "DVWA_M05",
+      "machine": "dvwa",
+      "level": "medium",
+      "category": "web/idor",
+      "question": "Manipulate the 'CSRF/insecure' flow to change ANOTHER user's password without knowing theirs. What class of vulnerability is this (acronym)?",
+      "hint": "Insecure direct object / cross-site request combination.",
+      "answer_sha256": "77a69a5d7497d432060d379a6116a42c57b642fa0fe8b17d4dc1c597dc00ac92"
+    },
+    {
+      "id": "DVWA_M06",
+      "machine": "dvwa",
+      "level": "medium",
+      "category": "web/session",
+      "question": "Inspect DVWA session handling: which cookie name stores the anti-CSRF token used on higher levels?",
+      "hint": "Look at the cookies set after login besides PHPSESSID.",
+      "answer_sha256": "00bc55eb73a2e88e74664ed192ae86248269a7380f9893e6b1863c1db5fb999f"
+    },
+    {
+      "id": "DVWA_H01",
+      "machine": "dvwa",
+      "level": "hard",
+      "category": "web/sqli-blind",
+      "question": "Perform blind SQLi on the 'SQL Injection (Blind)' High page to extract the DVWA DB version's MAJOR number. What is it? (integer)",
+      "hint": "Use boolean/time-based blind (or sqlmap). MySQL/MariaDB major version.",
+      "answer_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"
+    },
+    {
+      "id": "DVWA_H02",
+      "machine": "dvwa",
+      "level": "hard",
+      "category": "web/xss-dom",
+      "question": "Exploit the DOM-based XSS (High) that uses location data. Which JS property is the sink being abused?",
+      "hint": "The page writes part of the URL fragment into the DOM.",
+      "answer_sha256": "2f66012c1939749e1998ad9f9a1420dfad3140da217403fe44ff77e84752f42a"
+    },
+    {
+      "id": "DVWA_H03",
+      "machine": "dvwa",
+      "level": "hard",
+      "category": "web/csrf-token",
+      "question": "Bypass the High CSRF protection that ties the token to the session. What must an attacker first steal/predict to forge a valid request? (one word)",
+      "hint": "The request must include a valid ______.",
+      "answer_sha256": "3c469e9d6c5875d37a43f353d4f88e61fcf812c66eee3457465a40b0da4153e0"
+    },
+    {
+      "id": "DVWA_H04",
+      "machine": "dvwa",
+      "level": "hard",
+      "category": "web/upload-rce",
+      "question": "Chain a High-level upload bypass to remote code execution. After planting a webshell, which single command reveals the web server user? (submit the command)",
+      "hint": "A classic identity command run through your shell.",
+      "answer_sha256": "f25297859cf0a70af5c053a5464a5fa647a35ceee1d91397331903846d79ffc1"
+    },
+    {
+      "id": "JUICE_B01",
+      "machine": "juiceshop",
+      "level": "basic",
+      "category": "web/discovery",
+      "question": "OWASP Juice Shop hides a Score Board. What is the URL path (after #/) that reveals all challenges?",
+      "hint": "It's intentionally 'hidden' but easy to guess; check the JS bundle.",
+      "answer_sha256": "287723f35e9d004a423574ec5f4d87fc5c00080041ccb2d91732d4ba7f87f765"
+    },
+    {
+      "id": "JUICE_B02",
+      "machine": "juiceshop",
+      "level": "basic",
+      "category": "web/error-handling",
+      "question": "Provoke an error to leak the backend framework. Which Node.js web framework does Juice Shop use? (one word)",
+      "hint": "Trigger a 500; the stack trace names it. It's the most popular Node web framework.",
+      "answer_sha256": "008231aaf99956982ffbb132c5fe9d79272f6f109abdefb723afe455a4213765"
+    },
+    {
+      "id": "JUICE_B03",
+      "machine": "juiceshop",
+      "level": "basic",
+      "category": "web/sensitive-data",
+      "question": "Juice Shop exposes a directory of static confidential docs. What is the URL path segment that lists these leaked files?",
+      "hint": "Think 'ftp' style static folder served by the app.",
+      "answer_sha256": "1f35e175b07fc080eb57fc9db22a3ce477d87bc5447466815f55864d3b6e6586"
+    },
+    {
+      "id": "JUICE_M01",
+      "machine": "juiceshop",
+      "level": "medium",
+      "category": "web/sqli-auth-bypass",
+      "question": "Log in as the administrator via SQL injection in the email field. What is the exact injection string (email field) that logs you in as admin?",
+      "hint": "Comment out the password check: something like `' OR 1=1--`.",
+      "answer_sha256": "df532b9778eba7c1bba2a6ea93cdcdff3797156286a67e422cd36c69f8f527f2"
+    },
+    {
+      "id": "JUICE_M02",
+      "machine": "juiceshop",
+      "level": "medium",
+      "category": "web/broken-auth",
+      "question": "Reset a user's password via the insecure 'forgot password' security question flow. What is the field an attacker abuses to bypass it? (two words)",
+      "hint": "The recovery relies on a guessable ______ ______.",
+      "answer_sha256": "fd6303c994d8f985ab7b0bb11179d1005134e4732f28e759a5784b4de5b5689d"
+    },
+    {
+      "id": "JUICE_M03",
+      "machine": "juiceshop",
+      "level": "medium",
+      "category": "web/jwt",
+      "question": "Juice Shop signs JWTs. What signing algorithm downgrade lets an attacker forge tokens? (JWT 'alg' value)",
+      "hint": "Setting alg to this value tells the server the token is unsigned.",
+      "answer_sha256": "140bedbf9c3f6d56a9846d2ba7088798683f4da0c248231336e6a05679e4fdfe"
+    },
+    {
+      "id": "JUICE_M04",
+      "machine": "juiceshop",
+      "level": "medium",
+      "category": "web/idor",
+      "question": "Access another user's shopping basket by changing an identifier in the API path. What is the vulnerable API path segment? (one word)",
+      "hint": "GET /rest/basket/{id} \u2014 change the id.",
+      "answer_sha256": "fa76d99ad957d952fb3738ae1ed7282a18d3bca1531c7efc273d52e16b774bd6"
+    },
+    {
+      "id": "JUICE_H01",
+      "machine": "juiceshop",
+      "level": "hard",
+      "category": "web/nosql-injection",
+      "question": "Perform a NoSQL injection against the product search/order review. What database does Juice Shop use that enables NoSQL-style operators? (one word)",
+      "hint": "It's a document store used for reviews (starts with 'Mongo').",
+      "answer_sha256": "1cc9a79bdaf09793062750a17e559d40d5c0f1372cc859f67fe1081e6bc8a307"
+    },
+    {
+      "id": "JUICE_H02",
+      "machine": "juiceshop",
+      "level": "hard",
+      "category": "web/xxe",
+      "question": "Upload a crafted XML to trigger XXE and read a server file. What XML construct enables the external entity? (two words)",
+      "hint": "You declare a <!DOCTYPE> with an external ______ ______.",
+      "answer_sha256": "f928b836eba4bac388aa661d5da2c739f33ea035c8af3d1804f780fe493b5bf4"
+    },
+    {
+      "id": "JUICE_H03",
+      "machine": "juiceshop",
+      "level": "hard",
+      "category": "web/deserialization-rce",
+      "question": "Achieve RCE via an insecure dependency. What is the name of the vulnerable functionality that evaluates user-supplied code? (one word)",
+      "hint": "It parses/evaluates B2B order payloads; think a code 'sandbox' that isn't safe.",
+      "answer_sha256": "5bce98f73f3ed0c837f2729ed9509b38ea66a156db7f653356cb6fe37b366e85"
+    },
+    {
+      "id": "JUICE_H04",
+      "machine": "juiceshop",
+      "level": "hard",
+      "category": "web/ssrf",
+      "question": "Abuse the profile-image-URL feature to make the server fetch an internal resource (SSRF). Which request field do you control to point at internal hosts?",
+      "hint": "Set your profile image via a URL field.",
+      "answer_sha256": "f9ba1e4bcba421cff63f58d3cc3894ba75c7e1483c4bdeab48023d51f2199a82"
+    },
+    {
+      "id": "JUICE_H05",
+      "machine": "juiceshop",
+      "level": "hard",
+      "category": "web/access-control",
+      "question": "Escalate to the admin section of the SPA. What is the Angular route path for the administration page? (after #/)",
+      "hint": "Guess the admin route; it's literally named.",
+      "answer_sha256": "512afb6c763173d396baa0d08494e5845682df53d11f056110221a6601973e2c"
+    },
+    {
+      "id": "JUICE_H06",
+      "machine": "juiceshop",
+      "level": "hard",
+      "category": "web/crypto",
+      "question": "Juice Shop stores user passwords with a fast, unsalted hash. Which hashing algorithm is used (making cracking trivial)? (one word)",
+      "hint": "It's the classic broken-for-passwords 128-bit hash.",
+      "answer_sha256": "3ebff31b62c0637c54d4ffa990d5c100ea359994b35f4b342ff49797542148cd"
+    },
+    {
+      "id": "MSF_B01",
+      "machine": "metasploitable",
+      "level": "basic",
+      "category": "service/backdoor",
+      "question": "Metasploitable's FTP service has a famous backdoor. What FTP service+version is running that grants a root shell via CVE-2011-2523?",
+      "hint": "nmap -sV port 21. It's 'vsftpd' with a specific version.",
+      "answer_sha256": "67784a9acd53c7d6e1a495ed11d986cd7d49c0b24eeea71804aab3333e0c7994"
+    },
+    {
+      "id": "MSF_B02",
+      "machine": "metasploitable",
+      "level": "basic",
+      "category": "service/recon",
+      "question": "Enumerate open ports. Which port hosts the UnrealIRCd service that carries a backdoor?",
+      "hint": "nmap the host; IRC commonly runs on this port (and 6697).",
+      "answer_sha256": "073d53bacb8f1d3bc14ffcdcc08d92274b767112cfe6a65b1109fa2a965936ed"
+    },
+    {
+      "id": "MSF_B03",
+      "machine": "metasploitable",
+      "level": "basic",
+      "category": "service/default-creds",
+      "question": "The MySQL service accepts a default administrative login with no password. What username gets you in?",
+      "hint": "The classic DB superuser account.",
+      "answer_sha256": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2"
+    },
+    {
+      "id": "MSF_B04",
+      "machine": "metasploitable",
+      "level": "basic",
+      "category": "service/smb",
+      "question": "Samba is exploitable here. What Metasploit module class exploits the 'username map script' RCE? (submit CVE id)",
+      "hint": "Samba usermap script command injection, ~2007.",
+      "answer_sha256": "423678f602b6ea08a4f04c0663a5246f5c6ef66ef5f23f1e77e09f85876dfe47"
+    },
+    {
+      "id": "MSF_M01",
+      "machine": "metasploitable",
+      "level": "medium",
+      "category": "service/rce",
+      "question": "Exploit the distccd service for remote code execution. What CVE identifies the distcc RCE?",
+      "hint": "distcc daemon accepts compilation jobs -> command execution.",
+      "answer_sha256": "1c1080ed31e7c833c9bea7577f73bec4de197387acb4436000202096b6931bbb"
+    },
+    {
+      "id": "MSF_M02",
+      "machine": "metasploitable",
+      "level": "medium",
+      "category": "service/rce",
+      "question": "The Java RMI registry allows loading remote classes. What TCP port does the exploitable Java RMI service listen on?",
+      "hint": "nmap -sV; RMI registry default port.",
+      "answer_sha256": "330e14d4ae80612334d94c488d29eb469626b476864abdeb5c1bd261db461c50"
+    },
+    {
+      "id": "MSF_M03",
+      "machine": "metasploitable",
+      "level": "medium",
+      "category": "service/webapp",
+      "question": "Tomcat's manager app uses default creds. What is the default username:password pair to deploy a malicious WAR? (format user:pass)",
+      "hint": "Very common Tomcat default.",
+      "answer_sha256": "9c6141a02dd880a439d868f4d8dbbf06d6e6d6d4e2397081205155f324922c42"
+    },
+    {
+      "id": "MSF_H01",
+      "machine": "metasploitable",
+      "level": "hard",
+      "category": "privesc",
+      "question": "After a low-priv shell via a service, escalate using a vulnerable udev/kernel vector. What is the udev privesc CVE relevant to this era?",
+      "hint": "Local root via udev NETLINK, ~2009.",
+      "answer_sha256": "200160caba16f9e2558213cc0a1115025cd06f58fcb45aa3bb4aa7497213297c"
+    },
+    {
+      "id": "MSF_H02",
+      "machine": "metasploitable",
+      "level": "hard",
+      "category": "service/postgres",
+      "question": "PostgreSQL allows command execution for a privileged DB user. What default superuser account does Metasploitable expose?",
+      "hint": "The Postgres superuser role.",
+      "answer_sha256": "a942b37ccfaf5a813b1432caa209a43b9d144e47ad0de1549c289c253e556cd5"
+    },
+    {
+      "id": "MSF_H03",
+      "machine": "metasploitable",
+      "level": "hard",
+      "category": "post-exploitation",
+      "question": "Dump Linux password hashes after root. Which file holds the crackable password hashes you would exfiltrate?",
+      "hint": "The shadow file.",
+      "answer_sha256": "7b5ddf499844cf05866927513cf62fee9af8c281812def040b964146b0ea87d6"
+    },
+    {
+      "id": "MSF_H04",
+      "machine": "metasploitable",
+      "level": "hard",
+      "category": "service/rlogin",
+      "question": "Legacy 'r-services' trust relationships allow login without a password. Which single character in .rhosts grants access to any host/user?",
+      "hint": "A wildcard that matches everything.",
+      "answer_sha256": "a318c24216defe206feeb73ef5be00033fa9c4a74d0b967f6532a26ca5906d3b"
+    },
+    {
+      "id": "DC_B01",
+      "machine": "dc01",
+      "level": "basic",
+      "category": "ad/recon",
+      "question": "Enumerate the domain. What is the NetBIOS/short domain name configured for this lab DC?",
+      "hint": "Set during provisioning; it's the short name of 'ctflab.local'.",
+      "answer_sha256": "a846d74ebb0b45fb620cf6951acb5e87877948a371a2143a58320a4f020ad3e6"
+    },
+    {
+      "id": "DC_M01",
+      "machine": "dc01",
+      "level": "medium",
+      "category": "ad/asrep-roast",
+      "question": "A user has 'Do not require Kerberos preauthentication' set, enabling AS-REP roasting. What attack name describes cracking that returned hash?",
+      "hint": "AS-REP ______ing.",
+      "answer_sha256": "92e60665e2b4fbc2812f492d44b4c5e775137c993ed2f9f93a05ad406c60a455"
+    },
+    {
+      "id": "DC_M02",
+      "machine": "dc01",
+      "level": "medium",
+      "category": "ad/kerberoast",
+      "question": "A service account has an SPN set and a weak password, enabling Kerberoasting. Which Kerberos ticket type do you request and crack? (3-letter acronym)",
+      "hint": "Service ticket: T__.",
+      "answer_sha256": "83437aaed8df15160729aab6f18a38f39d987a925046645d6ee6c29b737ea399"
+    },
+    {
+      "id": "DC_H01",
+      "machine": "dc01",
+      "level": "hard",
+      "category": "ad/credential-dumping",
+      "question": "After compromising the DC, dump domain hashes. What attack technique extracts all domain credentials by abusing DC replication?",
+      "hint": "Impacket's secretsdump uses this replication attack (one word).",
+      "answer_sha256": "9ffe1c9cd4e0676ccf5f4f2bad989c346ece741395ce41f21593cc9c6d665e71"
+    },
+    {
+      "id": "DC_H02",
+      "machine": "dc01",
+      "level": "hard",
+      "category": "ad/kerberos-forgery",
+      "question": "With the KRBTGT hash, forge a ticket granting domain-wide persistence. What is this forged-ticket attack called? (two words)",
+      "hint": "A 'golden' something.",
+      "answer_sha256": "a5cf75865b718bf518d2e66c9a3ccc07e31a4aa5f1b417c4bbe448a607ec083e"
+    },
+    {
+      "id": "DC_H03",
+      "machine": "dc01",
+      "level": "hard",
+      "category": "ad/lateral-movement",
+      "question": "Move laterally using an NTLM hash without cracking it. What is this technique called? (two words)",
+      "hint": "Pass-the-______.",
+      "answer_sha256": "03f74e19029b3557af740a462668f7274a4c2a9897bb99710e51ef573508e655"
+    },
+    {
+      "id": "DC_H04",
+      "machine": "dc01",
+      "level": "hard",
+      "category": "ad/delegation",
+      "question": "A computer/service account is configured for unconstrained delegation. Which cached credential can you steal from it to impersonate any user?",
+      "hint": "You capture a user's Kerberos ______ (ticket-granting ticket).",
+      "answer_sha256": "655caf7addefeefb468ac49d82e7e8ae2c3c03346a8497cf32be3dcd7adf1b05"
+    },
+    {
+      "id": "DC_H05",
+      "machine": "dc01",
+      "level": "hard",
+      "category": "ad/acl-abuse",
+      "question": "Abuse a dangerous ACL where a low-priv user has write rights over a privileged group. What generic AD right (one word) allows adding yourself to that group?",
+      "hint": "GenericAll / Generic______ over the object.",
+      "answer_sha256": "dab397f38012eaedbfdf2f72e2c55d37453540509395f98de53cfe3da11540ae"
+    }
+  ]
+}
