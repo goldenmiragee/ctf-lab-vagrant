@@ -27,7 +27,8 @@ fi
 plant() {
   local id="$1" path="$2" mode="${3:-644}" owner="${4:-root:root}"
   local var="FLAG_${id}"
-  local val="${!var:-FLAG{missing_${id}}}"
+  local val="${!var:-}"
+  [ -z "$val" ] && val="FLAG{missing_${id}}"
   mkdir -p "$(dirname "$path")"
   printf '%s\n' "$val" > "$path"
   chmod "$mode" "$path"
@@ -112,7 +113,7 @@ plant SRV_B07 /var/www/html/.git/FLAG 644 www-data:www-data
 (cd /var/www/html/.git && echo "ref: refs/heads/master" > HEAD 2>/dev/null || true)
 
 # SRV_B08 — flag in a cron comment (world-readable)
-SRV_B08_VAL="${FLAG_SRV_B08:-FLAG{missing_SRV_B08}}"
+SRV_B08_VAL="${FLAG_SRV_B08:-}"; [ -z "$SRV_B08_VAL" ] && SRV_B08_VAL="FLAG{missing_SRV_B08}"
 cat > /etc/cron.d/backup-job <<EOF
 # Nightly backup job
 # NOTE(dev): temporary token for the backup API: ${SRV_B08_VAL}
@@ -152,7 +153,7 @@ echo '* * * * * root /opt/maintenance.sh' > /etc/cron.d/maintenance
 chmod 644 /etc/cron.d/maintenance
 
 # SRV_M04 — weak zip password protecting a flag
-SRV_M04_VAL="${FLAG_SRV_M04:-FLAG{missing_SRV_M04}}"
+SRV_M04_VAL="${FLAG_SRV_M04:-}"; [ -z "$SRV_M04_VAL" ] && SRV_M04_VAL="FLAG{missing_SRV_M04}"
 echo "$SRV_M04_VAL" > /opt/backup/_secret_plain.txt
 chmod 600 /opt/backup/_secret_plain.txt   # the plaintext copy is root-only
 (cd /opt/backup && zip -P sunshine secret.zip _secret_plain.txt >/dev/null 2>&1) || \
@@ -172,7 +173,8 @@ exportfs -ra >/dev/null 2>&1 || true
 systemctl restart nfs-kernel-server >/dev/null 2>&1 || true
 
 # SRV_M07 — MySQL root with empty password + flag in a 'secrets' DB
-SRV_M07_VAL="${FLAG_SRV_M07:-FLAG{missing_SRV_M07}}"
+SRV_M07_VAL="${FLAG_SRV_M07:-}"; [ -z "$SRV_M07_VAL" ] && SRV_M07_VAL="FLAG{missing_SRV_M07}"
+mkdir -p /opt/dbseed
 cat > /opt/dbseed/mysql_flag.sql <<EOF
 CREATE DATABASE IF NOT EXISTS secrets;
 USE secrets;
@@ -180,7 +182,6 @@ CREATE TABLE IF NOT EXISTS flags (name VARCHAR(64), value VARCHAR(128));
 DELETE FROM flags;
 INSERT INTO flags VALUES ('server', '${SRV_M07_VAL}');
 EOF
-mkdir -p /opt/dbseed
 systemctl start mysql >/dev/null 2>&1 || true
 # force root to use empty-password auth (lab-only, intentionally insecure)
 mysql -u root <<'SQL' 2>/dev/null || log "WARNING: could not seed MySQL (SRV_M07)"
@@ -238,7 +239,7 @@ usermod -aG docker deploy
 systemctl enable --now docker >/dev/null 2>&1 || true
 
 # SRV_H04 — leaked API token still valid against local admin API on :8082
-SRV_H04_VAL="${FLAG_SRV_H04:-FLAG{missing_SRV_H04}}"
+SRV_H04_VAL="${FLAG_SRV_H04:-}"; [ -z "$SRV_H04_VAL" ] && SRV_H04_VAL="FLAG{missing_SRV_H04}"
 mkdir -p /opt/adminapi
 echo "$SRV_H04_VAL" > /opt/adminapi/token_flag.txt
 chmod 600 /opt/adminapi/token_flag.txt

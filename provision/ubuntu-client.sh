@@ -20,12 +20,13 @@ fi
 
 plant() {
   local id="$1" path="$2" mode="${3:-644}" owner="${4:-root:root}"
-  local var="FLAG_${id}"; local val="${!var:-FLAG{missing_${id}}}"
+  local var="FLAG_${id}"; local val="${!var:-}"
+  [ -z "$val" ] && val="FLAG{missing_${id}}"
   mkdir -p "$(dirname "$path")"
   printf '%s\n' "$val" > "$path"; chmod "$mode" "$path"; chown "$owner" "$path"
   log "planted $id -> $path"
 }
-val_of() { local var="FLAG_$1"; echo "${!var:-FLAG{missing_$1}}"; }
+val_of() { local var="FLAG_$1"; local v="${!var:-}"; [ -z "$v" ] && v="FLAG{missing_$1}"; printf '%s' "$v"; }
 
 export DEBIAN_FRONTEND=noninteractive
 log "installing packages..."
