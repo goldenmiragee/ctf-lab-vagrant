@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ctf-lab-vagrant · scoreboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🛡️</span>
+      <div>
+        <h1>ctf-lab-vagrant</h1>
+        <p class="tagline">local scoreboard — capture flags, unlock the next</p>
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress-count"><span id="solved-count">0</span> / <span id="total-count">0</span> flags</div>
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+      <button id="reset-btn" class="reset-btn" title="Clear saved progress">reset</button>
+    </div>
+  </header>
+
+  <nav id="tabs" class="tabs" role="tablist"><!-- machine tabs injected --></nav>
+
+  <main id="panels" class="panels"><!-- flag panels injected --></main>
+
+  <footer class="footer">
+    <span>Isolated lab · answers validated locally (SHA-256) · no data leaves your browser</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
