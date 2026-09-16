@@ -1,0 +1,19 @@
+# Normalize line endings. Linux-executed files MUST stay LF or they break on the
+# guests (e.g. bash reports "$'\r': command not found").
+* text=auto eol=lf
+
+*.sh        text eol=lf
+Vagrantfile text eol=lf
+*.py        text eol=lf
+*.env       text eol=lf
+*.md        text eol=lf
+*.svg       text eol=lf
+
+# Windows-executed script keeps CRLF
+*.ps1       text eol=crlf
+
+# Binary assets (add real captures here later)
+*.png binary
+*.jpg binary
+*.vdi binary
+*.box binary
