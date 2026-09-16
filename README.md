@@ -158,18 +158,27 @@ escalation, container & namespace escapes, service CVEs, and Active Directory at
 
 ## 📓 Testing log — what worked, what didn't
 
-Honest notes from building and attacking each box. This is the real methodology; it is
-updated as I actually run the lab (rows marked _planned_ are not yet executed end-to-end).
+Honest notes from building and attacking each box — including what broke and how I fixed it.
 
-| Target          | Technique                              | Result | Notes                                             |
-|-----------------|----------------------------------------|:------:|---------------------------------------------------|
-| ubuntu-server   | `sudo -l` → GTFOBins shell escape      |  _planned_ | Path validated in provisioning; run pending    |
-| ubuntu-server   | SUID PATH hijack                       |  _planned_ | Custom SUID binary compiled at provision time   |
-| ubuntu-client   | Readable private SSH key → lateral     |  _planned_ | Key perms intentionally loosened                |
-| dvwa            | Reflected + stored XSS (Low/Medium)    |  _planned_ | Depends on DVWA security-level cookie           |
-| juiceshop       | Auth-bypass SQLi in login              |  _planned_ | `' OR 1=1--` in email field                     |
-| metasploitable  | vsftpd 2.3.4 backdoor (CVE-2011-2523)  |  _planned_ | Phase 2                                         |
-| dc01            | Windows Server on VirtualBox 7.2       |  _planned_ | Phase 3 — build stability tracked in known-issues|
+**Phase 1 — verified on live VMs** (VirtualBox 7.2.6, Vagrant 2.4.9):
+
+| Target          | What I verified                                        | Result   | Notes                                                             |
+|-----------------|--------------------------------------------------------|:--------:|-------------------------------------------------------------------|
+| ubuntu-server   | `vagrant up` + provisioning end-to-end                 | ✅       | Boots on the host-only net; services provision cleanly            |
+| ubuntu-server   | Planted flags hash-match the scoreboard                | ✅       | Verified web-root, MOTD, sudo, NFS, docker-group, MySQL flags     |
+| all planted     | Captured flag value == `flags.json` hash               | ❌ → ✅   | A bash brace-matching bug appended a stray `}` to **every** flag, so none validated. Root-caused to the `${!var:-…}` default, fixed at the helper, re-verified 13 flags. |
+| ubuntu-server   | MySQL empty-root flag seed                             | ❌ → ✅   | First run failed (`No such file or directory`) — seed dir created after the write; reordered `mkdir` and re-verified. |
+| ubuntu-client   | `vagrant up` + provisioning end-to-end                 | ✅       | Base image cached from the server build → fast boot               |
+| ubuntu-client   | Direct / base64 / XOR-split / cross-host pivot flags    | ✅       | `CLI_B04` base64, `CLI_H05` XOR reconstruction, `SRV_H06` pivot all validate |
+
+**Pending / upcoming:**
+
+| Target          | Technique                                | Result     | Notes                                    |
+|-----------------|------------------------------------------|:----------:|------------------------------------------|
+| dvwa            | Reflected + stored XSS (Low/Medium)      | _pending_  | Phase 1 — provisioning written, not yet booted |
+| juiceshop       | Auth-bypass SQLi in login                | _pending_  | Phase 1 — `' OR 1=1--` in email field    |
+| metasploitable  | vsftpd 2.3.4 backdoor (CVE-2011-2523)    | _planned_  | Phase 2                                  |
+| dc01            | Windows Server on VirtualBox 7.2         | _planned_  | Phase 3 — build stability tracked in known-issues |
 
 Detailed per-level writeups live in **[docs/walkthroughs/](docs/walkthroughs/)**.
 

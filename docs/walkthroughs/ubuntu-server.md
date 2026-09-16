@@ -27,12 +27,13 @@ and **Linux privilege escalation**.
 
 ## Testing log (this box)
 
-| Flag id   | Technique                       | Result     | Notes                                  |
-|-----------|---------------------------------|:----------:|----------------------------------------|
-| SRV_B01   | Exposed web-root file           | _planned_  |                                        |
-| SRV_M01   | `sudo` GTFOBins escape          | _planned_  |                                        |
-| SRV_M02   | SUID PATH hijack                | _planned_  |                                        |
-| SRV_H03   | `docker` group → host root      | _planned_  |                                        |
-| SRV_H06   | Credential reuse → pivot        | _planned_  | Confirms `ubuntu-client` reachability  |
+| Flag id   | Technique                       | Result     | Notes                                            |
+|-----------|---------------------------------|:----------:|--------------------------------------------------|
+| SRV_B01   | Exposed web-root file           | ✅         | Flag value hash-matches the scoreboard           |
+| SRV_M01   | `sudo` GTFOBins escape          | ✅         | `/root/flag_sudo.txt` planted & validated        |
+| SRV_M02   | SUID PATH hijack                | _pending_  | SUID binary compiles at provision; exploit run pending |
+| SRV_M07   | Empty-root MySQL flag           | ✅         | Fixed a seed-order bug, then validated           |
+| SRV_H03   | `docker` group → host root      | ✅         | `/root/.hidden/flag_docker.txt` validated        |
+| SRV_H06   | Credential reuse → pivot        | ✅         | Pivot flag on `ubuntu-client` validated          |
 
-_Fill Result with ✅ / ⚠️ / ❌ and notes as each is executed._
+_Result legend: ✅ verified end-to-end · ⚠️ partial · ❌ failed · _pending_ not yet run._
