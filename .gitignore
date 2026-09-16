@@ -1,0 +1,32 @@
+# ---- Secrets / answer material (NEVER commit) ----
+answers-key.md
+flags_source.py
+provision/flags.env
+*.key
+*.pem
+id_rsa
+id_rsa.*
+
+# ---- Vagrant / VirtualBox artifacts ----
+.vagrant/
+*.box
+*.vdi
+*.vmdk
+*.ova
+*.log
+ubuntu-*.log
+vagrant-*.log
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---- OS / editor cruft ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
