@@ -12,7 +12,7 @@
   <img alt="VirtualBox"   src="https://img.shields.io/badge/VirtualBox-183A61?logo=virtualbox&logoColor=white">
   <img alt="Python"       src="https://img.shields.io/badge/Python-stdlib_only-3776AB?logo=python&logoColor=white">
   <img alt="Flags"        src="https://img.shields.io/badge/Flags-90%20(30%2F30%2F30)-brightgreen">
-  <img alt="Status"       src="https://img.shields.io/badge/Status-Phase%201-yellow">
+  <img alt="Status"       src="https://img.shields.io/badge/Phase%201-verified%20live-brightgreen">
   <img alt="License"      src="https://img.shields.io/badge/License-MIT-blue">
 </p>
 
@@ -170,13 +170,13 @@ Honest notes from building and attacking each box — including what broke and h
 | ubuntu-server   | MySQL empty-root flag seed                             | ❌ → ✅   | First run failed (`No such file or directory`) — seed dir created after the write; reordered `mkdir` and re-verified. |
 | ubuntu-client   | `vagrant up` + provisioning end-to-end                 | ✅       | Base image cached from the server build → fast boot               |
 | ubuntu-client   | Direct / base64 / XOR-split / cross-host pivot flags    | ✅       | `CLI_B04` base64, `CLI_H05` XOR reconstruction, `SRV_H06` pivot all validate |
+| dvwa            | Web app reachable + login page renders                 | ✅       | HTTP 200 at `192.168.56.21`; fixed a DB-auth mismatch (config used the default `p@ssw0rd`) first |
+| juiceshop       | App reachable (Dockerised)                             | ✅       | HTTP 200 at `192.168.56.22`; container healthy, `:80→:3000` |
 
 **Pending / upcoming:**
 
 | Target          | Technique                                | Result     | Notes                                    |
 |-----------------|------------------------------------------|:----------:|------------------------------------------|
-| dvwa            | Reflected + stored XSS (Low/Medium)      | _pending_  | Phase 1 — provisioning written, not yet booted |
-| juiceshop       | Auth-bypass SQLi in login                | _pending_  | Phase 1 — `' OR 1=1--` in email field    |
 | metasploitable  | vsftpd 2.3.4 backdoor (CVE-2011-2523)    | _planned_  | Phase 2                                  |
 | dc01            | Windows Server on VirtualBox 7.2         | _planned_  | Phase 3 — build stability tracked in known-issues |
 

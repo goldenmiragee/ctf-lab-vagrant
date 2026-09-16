@@ -22,10 +22,8 @@ if [ ! -d /var/www/html/DVWA ]; then
 fi
 
 if [ -d /var/www/html/DVWA ]; then
-  # config
+  # config (keep DVWA's default DB password 'p@ssw0rd'; we match it in MariaDB below)
   cp -n /var/www/html/DVWA/config/config.inc.php.dist \
-        /var/www/html/DVWA/config/config.inc.php 2>/dev/null || true
-  sed -i "s/'db_password' ] = 'p@ssw0rd'/'db_password' ] = 'dvwa'/" \
         /var/www/html/DVWA/config/config.inc.php 2>/dev/null || true
 
   # writable dirs DVWA expects
@@ -50,7 +48,8 @@ fi
 systemctl enable --now mariadb >/dev/null 2>&1 || true
 mysql <<'SQL' 2>/dev/null || log "WARNING: DB setup failed"
 CREATE DATABASE IF NOT EXISTS dvwa;
-CREATE USER IF NOT EXISTS 'dvwa'@'localhost' IDENTIFIED BY 'dvwa';
+CREATE USER IF NOT EXISTS 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';
+ALTER USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';
 GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';
 FLUSH PRIVILEGES;
 SQL
