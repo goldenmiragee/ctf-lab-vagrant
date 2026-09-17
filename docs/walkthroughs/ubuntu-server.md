@@ -1,7 +1,7 @@
 # Walkthrough — `ubuntu-server` (192.168.56.30)
 
-> 🚧 **Work in progress.** Methodology and intended paths are outlined; solved-flag notes and
-> screenshots are added as the lab is run end-to-end. No plaintext flags here (see the
+> ✅ **Verified:** all 21 `SRV_*` planted flags were captured on the live VM and hash-matched
+> to the scoreboard. Methodology below; no plaintext flags here (see the
 > [no-spoiler policy](README.md#no-spoiler-policy)).
 
 `ubuntu-server` is a **planted** target: provisioning creates the vulnerabilities and writes

@@ -13,14 +13,14 @@ If you want the plaintext answers for self-grading, generate them locally with y
 
 ## Index
 
-| Machine          | Status        | File                                        |
-|------------------|---------------|---------------------------------------------|
-| `ubuntu-server`  | 🚧 WIP        | [ubuntu-server.md](ubuntu-server.md)        |
-| `ubuntu-client`  | 🚧 planned    | _to be added_                               |
-| `dvwa`           | 🚧 planned    | _to be added_                               |
-| `juiceshop`      | 🚧 planned    | _to be added_                               |
-| `metasploitable` | 🚧 Phase 2    | _to be added_                               |
-| `dc01`           | 🚧 Phase 3    | _to be added_                               |
+| Machine          | Status            | File                                          |
+|------------------|-------------------|-----------------------------------------------|
+| `ubuntu-server`  | ✅ done           | [ubuntu-server.md](ubuntu-server.md)          |
+| `ubuntu-client`  | ✅ done           | [ubuntu-client.md](ubuntu-client.md)          |
+| `dvwa`           | ✅ done           | [dvwa.md](dvwa.md)                            |
+| `juiceshop`      | ✅ done           | [juiceshop.md](juiceshop.md)                  |
+| `metasploitable` | ✅ done           | [metasploitable.md](metasploitable.md)        |
+| `dc01`           | ⚠️ blocked (WinRM)| [dc01.md](dc01.md)                            |
 
 ## Suggested toolkit
 

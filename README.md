@@ -162,6 +162,11 @@ Honest notes from building and attacking each box — including what broke and h
 
 **Phase 1 — verified on live VMs** (VirtualBox 7.2.6, Vagrant 2.4.9):
 
+> **All 42 planted flags** were captured from the running `ubuntu-server` / `ubuntu-client`
+> VMs and confirmed to hash-match the scoreboard — including the decode-required ones
+> (EXIF comment, base64 dotfile, whitespace steganography, XOR-split) and the `/etc/shadow`
+> hash crack. Verified with a scripted extract-and-compare pass.
+
 | Target          | What I verified                                        | Result   | Notes                                                             |
 |-----------------|--------------------------------------------------------|:--------:|-------------------------------------------------------------------|
 | ubuntu-server   | `vagrant up` + provisioning end-to-end                 | ✅       | Boots on the host-only net; services provision cleanly            |
